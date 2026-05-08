@@ -25,3 +25,12 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Images uploadées en local
+*.jpeg
+*.jpg
+*.png
+*.webp
+/public/storage
+/storage/app/public
+/mes_images/
