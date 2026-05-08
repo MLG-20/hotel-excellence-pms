@@ -61,7 +61,6 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? [
                 PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '" . env('DB_PASSWORD') . "'",
             ] : [],
         ],
 

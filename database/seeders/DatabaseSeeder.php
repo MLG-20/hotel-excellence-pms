@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->command->info('Démarrage du seeder...');
+
         // Utilisateurs par rôle
         User::updateOrCreate(
             ['email' => 'directeur@hotel.com'],
@@ -92,14 +94,23 @@ class DatabaseSeeder extends Seeder
             ClientHotel::firstOrCreate(['email' => $client['email']], $client);
         }
 
-        // Réservations et séjours
-        $client1 = ClientHotel::where('email', 'mamadou.diallo@email.com')->first();
-        $client2 = ClientHotel::where('email', 'fatou.traore@email.com')->first();
-        $client3 = ClientHotel::where('email', 'pierre.martin@email.fr')->first();
+        $this->command->info('Utilisateurs et chambres créés.');
 
+        // Réservations et séjours
+        $client1  = ClientHotel::where('email', 'mamadou.diallo@email.com')->first();
+        $client2  = ClientHotel::where('email', 'fatou.traore@email.com')->first();
+        $client3  = ClientHotel::where('email', 'pierre.martin@email.fr')->first();
         $chambre201 = Chambre::where('numero', '201')->first();
         $chambre101 = Chambre::where('numero', '101')->first();
         $chambre301 = Chambre::where('numero', '301')->first();
+
+        if (! $client1 || ! $client2 || ! $client3 || ! $chambre201 || ! $chambre101 || ! $chambre301) {
+            $this->command->warn('Clients ou chambres manquants — réservations ignorées.');
+            $this->call(SliderHeroSeeder::class);
+            $this->call(PageSiteSeeder::class);
+            $this->call(AvisClientSeeder::class);
+            return;
+        }
 
         // Réservation active (check-in en cours)
         $res1 = Reservation::firstOrCreate(
@@ -191,5 +202,7 @@ class DatabaseSeeder extends Seeder
                 'statut'        => 'livre',
             ]
         );
+
+        $this->command->info('Seeder terminé avec succès.');
     }
 }
